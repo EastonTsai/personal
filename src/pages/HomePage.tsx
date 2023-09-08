@@ -1,6 +1,6 @@
 
 import personal_01 from 'files/pictures/Personal_01.png'
-
+import login_register_page_01 from 'files/pictures/login_register_page_01.png'
 
 import BasicInformation from "components/BasicInformation"
 import Header from "components/Header"
@@ -37,6 +37,14 @@ const HomePage = () => {
               content='把個人資料及作品連結集中在這裡'
               feature={['RWD', '程式寫入資訊']}
               about={['React', 'Tailwind Css', 'TypeScript']}
+            />
+            <SampleCard
+              link='https://eastontsai.github.io/login_register_page/'
+              title='登入/註冊'
+              picture={login_register_page_01}
+              content='網頁必備登入頁面(含表單驗證)'
+              feature={['前端驗證表單']}
+              about={['React', 'Scss', 'TypeScript']}
             />
 
           </div>

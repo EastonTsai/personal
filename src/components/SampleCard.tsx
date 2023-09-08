@@ -20,7 +20,7 @@ const SampleCard = (props: {
         <Link to={link}>
           <img className='max-w-full max-h-full mx-auto' src={picture} alt="Personal" />
           <div className='absolute top-0 left-0 w-full h-full bg-gray-400 opacity-80 flex justify-center duration-500 hover:opacity-0'>
-            <h1 className='h-full writing-vertical font-black text-5xl text-center text-white'>{title}</h1>
+            <h1 className='my-auto writing-vertical font-black text-5xl text-white leading-[3.5rem]'>{title}</h1>
           </div>
         </Link>
         <div className={`absolute w-full h-full top-0 -left-full bg-gray-600 text-white p-2 transition-[.3s] ${!featureHidden && 'translate-x-full'}`}>
