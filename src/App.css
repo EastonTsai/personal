@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.container-default {
+  @apply w-[90%] max-w-[1280px] mx-auto border border-gray-300 rounded-lg overflow-hidden;
+}
+
+.wrap-90 {
+  width: 90%;
+  margin: 0 auto;
+}
+
 .writing-vertical {
   writing-mode: vertical-rl;
   text-orientation: upright;
@@ -59,4 +68,44 @@
     bottom: 0;
   }
 
+}
+
+.user-icon,
+.home-icon,
+.out-load-icon {
+  padding: 1px;
+  border: 1px solid white;
+  border-radius: 50%;
+
+  >path {
+    stroke: white;
+  }
+}
+
+.edit-icon {
+  >path {
+    stroke: white;
+  }
+}
+
+.active {
+  @apply text-2xl text-black
+}
+
+.form-item-wrap {
+  & {
+    @apply flex items-center gap-x-2
+  }
+
+  &>:nth-child(1) {
+    @apply flex-none
+  }
+
+  &>:nth-child(2) {
+    @apply grow py-2 ps-4 bg-gray-100 outline-none
+  }
+}
+
+.form-button {
+  @apply block mt-12 mx-auto py-2 px-6 font-bold text-2xl text-gray-400 hover:text-black bg-gray-200 hover:bg-gray-300 rounded-lg transition ease-in
 }

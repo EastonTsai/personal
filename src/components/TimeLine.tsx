@@ -13,8 +13,8 @@ const TimeLine = (props: {
 
       <div className="h-[150px] sm:h-[200px] p-2 flex flex-col justify-center overflow-hidden ">
         <div className="border-2 rounded-xl p-2 bg-gray-50">
-          {what.map(item =>
-            <p className=" w-full max-h-full overflow-auto">。{item}</p>
+          {what?.map(item =>
+            <p key={item} className=" w-full max-h-full overflow-auto">。{item}</p>
           )}
         </div>
       </div>
