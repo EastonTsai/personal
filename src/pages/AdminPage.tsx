@@ -14,19 +14,18 @@ const AdminPage = () => {
         <section className=" p-4 flex gap-4">
           {pages.map((item, index) =>
             <span
-              key={index}
-              onClick={() => setCurrentPage(index)}
+              key={item}
+              onClick={() => setCurrentPage(Number(index))}
               className={`font-black text-xl text-gray-400 cursor-pointer transition-[.5s] ${index === currentPage && 'active'}`}
             >{item}</span>
           )}
         </section>
-        <section className={`flex transition ease-in -translate-x-[${100 * currentPage}%]`}>
+        <section className='flex transition ease-in' style={{ 'transform': `translateX(-${100 * currentPage}%)` }}>
           <EditPersonal />
           <EditPortfolio />
           <EditExperience />
         </section>
       </main>
-
     </div>
   )
 }

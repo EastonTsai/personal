@@ -1,4 +1,3 @@
-import { resolve } from "path"
 
 export const FormInput = (props: {
   type?: string,

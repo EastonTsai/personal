@@ -1,7 +1,6 @@
 import { ReactComponent as EditIcon } from 'files/icons/edit.svg'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { db } from 'utils/firebase'
 
 const SampleCard = (props: {
   id: string
@@ -12,7 +11,7 @@ const SampleCard = (props: {
   about: string[]
   feature: string[],
 }) => {
-  const { id, link, title, picture, content, about, feature } = props
+  const { link, title, picture, content, about, feature } = props
   const [technologyHidden, setTechnologyHidden] = useState(true)
   const [featureHidden, setFeatureHidden] = useState(true)
 

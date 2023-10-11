@@ -6,12 +6,6 @@ import TimeLine from "components/TimeLine"
 import { useState, useEffect } from 'react'
 import { db, getDatabase, getOneDatabase } from 'utils/firebase'
 
-type experienceType = {
-  achievementList: string[],
-  company: string,
-  data: string
-}
-
 const HomePage = () => {
   const [personal, setPersonal] = useState<any | null>(null)
   const [sampleCards, setSampleCards] = useState<any[]>([])

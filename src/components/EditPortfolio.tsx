@@ -1,5 +1,5 @@
 import { loadImage } from "methods/loadImage"
-import { FormFile, FormInput } from "./FormItem"
+import { FormInput } from "./FormItem"
 import { useState, useRef } from 'react'
 import { addDatabase, upLoadStorage } from "utils/firebase"
 
