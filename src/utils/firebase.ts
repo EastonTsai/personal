@@ -17,8 +17,28 @@ firebase.initializeApp(firebaseConfig)
 export const db = firebase.firestore()
 const storage = firebase.storage()
 
+export const getOneDatabase = async (collection: string, doc: string) => {
+  const res = await db.collection(collection).doc(doc).get()
+  if (res) {
+    return res.data()
+  }
+}
+export const getDatabase = async (collection: string) => {
+  const res = await db.collection(collection).get()
+  if (res) {
+    const data = res.docs.map(doc => {
+      const docId = doc.id
+      const docData = doc.data()
+      docData.id = docId
+      return docData
+    }
+    )
+    return data
+  }
+}
 export const addDatabase = async (
   imageUrl: string,
+  link: string,
   title: string,
   introduce: string,
   features: string[],
@@ -28,6 +48,7 @@ export const addDatabase = async (
     const doc = await db.collection('portfolio').add(
       {
         imageUrl,
+        link,
         title,
         introduce,
         features,
@@ -40,19 +61,27 @@ export const addDatabase = async (
   }
   catch (err) { console.log('error', err) }
 }
-export const getOneDatabase = async (collection: string, doc: string) => {
-  const res = await db.collection(collection).doc(doc).get()
-  if (res) {
-    return res.data()
-  }
+
+interface portfolioType {
+  imageUrl: string | undefined,
+  link: string,
+  title: string,
+  introduce: string,
+  features: string[],
+  technology: string[]
 }
-export const getDatabase = async (collection: string) => {
-  const res = await db.collection(collection).get()
-  if (res) {
-    const data = res.docs.map(doc => doc.data())
-    return data
+export const editDatabase = async (collection: string, id: string, data: portfolioType
+) => {
+  try {
+    const res = await db.collection(collection).doc(id).set(data)
+    console.log('res::', res)
   }
+  catch (err) {
+    console.log('error', err)
+  }
+
 }
+
 export const setDatabase = (
   name: string,
   state: string,

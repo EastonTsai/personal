@@ -1,6 +1,7 @@
 import { ReactComponent as EditIcon } from 'files/icons/edit.svg'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { EditModal } from './Modal'
 
 const SampleCard = (props: {
   id: string
@@ -11,13 +12,10 @@ const SampleCard = (props: {
   about: string[]
   feature: string[],
 }) => {
-  const { link, title, picture, content, about, feature } = props
+  const { id, link, title, picture, content, about, feature } = props
   const [technologyHidden, setTechnologyHidden] = useState(true)
   const [featureHidden, setFeatureHidden] = useState(true)
-
-  const handleEdit = async () => {
-
-  }
+  const [editModal, setEditModal] = useState(false)
 
   return (
     <div className=' shrink-0 box-border w-1/2 sm:w-1/3 lg:w-1/4 shadow'>
@@ -42,7 +40,7 @@ const SampleCard = (props: {
         </button>
         <button
           className=' absolute bottom-4 right-4 w-6 h-6 bg-white p-1 rounded-lg hover:bg-blue-300 transition ease-in'
-          onClick={handleEdit}
+          onClick={() => setEditModal(true)}
         >
           <EditIcon className=' h-full w-full' />
         </button>
@@ -64,6 +62,19 @@ const SampleCard = (props: {
           </div>
         </div>
       </div>
+      {
+        editModal &&
+        <EditModal
+          onClick={(boolean) => !boolean && setEditModal(false)}
+          id={id}
+          image={picture}
+          title={title}
+          link={link}
+          introduce={content}
+          features={feature}
+          technology={about}
+        />
+      }
     </div>
   )
 }

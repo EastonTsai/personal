@@ -1,15 +1,31 @@
 import { loadImage } from "methods/loadImage"
 import { FormInput } from "./FormItem"
 import { useState, useRef } from 'react'
-import { addDatabase, upLoadStorage } from "utils/firebase"
+import { addDatabase, editDatabase, upLoadStorage } from "utils/firebase"
 
-const EditPortfolio = () => {
-  const [imgRef, setImgRef] = useState('')
+interface editModal {
+  edit?: boolean,
+  close?: (boolean: boolean) => void,
+  id?: string,
+  defaultImage?: string,
+  defaultTitle?: string,
+  defaultLink?: string,
+  defaultIntroduce?: string,
+  defaultFeatures?: string[],
+  defaultTechnology?: string[],
+}
+
+const EditPortfolio = (props: editModal) => {
+  const { edit = false, close, id, defaultImage, defaultTitle, defaultLink, defaultIntroduce, defaultFeatures, defaultTechnology } = props
+  const [imgRef, setImgRef] = useState(defaultImage || '')
   const file = useRef<File>()
-  const [title, setTitle] = useState('')
-  const [introduce, setIntroduce] = useState('')
+  const [title, setTitle] = useState(defaultTitle || '')
+  const [link, setLink] = useState(defaultLink || '')
+  const [introduce, setIntroduce] = useState(defaultIntroduce || '')
   const [features, setFeatures] = useState('')
+  const [featureList, setFeatureList] = useState<string[]>(defaultFeatures || [])
   const [technology, setTechnology] = useState('')
+  const [technologyList, setTechnologyList] = useState<string[]>(defaultTechnology || [])
 
   const handleGetImageRef = async (files: FileList | null) => {
     if (files && files.length >= 1) {
@@ -19,8 +35,6 @@ const EditPortfolio = () => {
     }
   }
   const handleAddPortfolio = async () => {
-    const featureList = features.split(' ')
-    const technologyList = technology.split(' ')
     if (
       !file.current ||
       title.trim().length < 1 ||
@@ -34,11 +48,40 @@ const EditPortfolio = () => {
     try {
       const imageUrl = await upLoadStorage(file.current)
       if (imageUrl) {
-        const id = await addDatabase(imageUrl, title, introduce, featureList, technologyList)
-        console.log('id', id)
+        const id = await addDatabase(imageUrl, link, title, introduce, featureList, technologyList)
       }
     }
     catch (err) { console.log('error', err) }
+  }
+  const handleEdit = async () => {
+    if (
+      title.trim().length < 1 ||
+      introduce.trim().length < 1 ||
+      featureList.length < 1 ||
+      technologyList.length < 1
+    ) {
+      alert('輸入不可空白')
+      return
+    }
+    let imageUrl
+    if (file.current) {
+      imageUrl = await upLoadStorage(file.current)
+    } else {
+      imageUrl = defaultImage
+    }
+    if (id) {
+      await editDatabase('portfolio', id,
+        {
+          imageUrl,
+          link,
+          title,
+          introduce,
+          features: featureList,
+          technology: technologyList
+        })
+    }
+
+
   }
 
   return (
@@ -76,29 +119,90 @@ const EditPortfolio = () => {
             onChange={(value) => setTitle(value)}
           />
           <FormInput
+            title='網址'
+            value={link}
+            placeholder='請輸入網址'
+            onChange={(value) => setLink(value)}
+          />
+          <FormInput
             title='介紹'
             value={introduce}
             placeholder='商品簡介'
             onChange={(value) => setIntroduce(value)}
           />
-          <FormInput
-            title='功能'
-            value={features}
-            placeholder='相關功能 (使用 "空格" 分隔)'
-            onChange={(value) => setFeatures(value)}
-          />
-          <FormInput
-            title='技術'
-            value={technology}
-            placeholder='相關技術 (使用 "空格" 分隔)'
-            onChange={(value) => setTechnology(value)}
-          />
           <div>
-            <button
-              className="form-button"
-              onClick={handleAddPortfolio}
-            >新增</button>
+            <FormInput
+              title='功能'
+              value={features}
+              placeholder='按 Enter 新增'
+              onChange={(value) => setFeatures(value)}
+              onEnter={() => {
+                setFeatureList(prev => [features, ...prev])
+                setFeatures('')
+              }}
+            />
+            {featureList.length >= 1 &&
+              <div className=" mt-2 min-h border">
+                {
+                  featureList.map(item =>
+                    <div className="flex items-center">
+                      <p className=" p-1">- {item}</p>
+                      <span className=" ml-2 p-1 rounded-full font-bold text-red-400 cursor-pointer hover:bg-gray-300"
+                        onClick={() => setFeatureList(featureList.filter(content => content !== item))}
+                      >X</span>
+                    </div>
+                  )
+                }
+              </div>
+            }
+
           </div>
+          <div>
+            <FormInput
+              title='技術'
+              value={technology}
+              placeholder='按 Enter 新增'
+              onChange={(value) => setTechnology(value)}
+              onEnter={() => {
+                setTechnologyList(prev => [technology, ...prev])
+                setTechnology('')
+              }}
+            />
+            {technologyList.length >= 1 &&
+              <div className=" mt-2 min-h border">
+                {
+                  technologyList.map(item =>
+                    <div className="flex items-center">
+                      <p className=" p-1">- {item}</p>
+                      <span className=" ml-2 p-1 rounded-full font-bold text-red-400 cursor-pointer hover:bg-gray-300"
+                        onClick={() => setTechnologyList(technologyList.filter(content => content !== item))}
+                      >X</span>
+                    </div>
+                  )
+                }
+              </div>
+            }
+          </div>
+          {
+            !edit ?
+              <div>
+                <button
+                  className="form-button"
+                  onClick={handleAddPortfolio}
+                >新增</button>
+              </div>
+              :
+              <div className=" flex gap-10 justify-center">
+                <button
+                  className=" py-2 px-4 bg-gray-200 hover:bg-gray-500 transition-inset"
+                  onClick={handleEdit}
+                >確定修改</button>
+                <button
+                  className=" py-2 px-4 bg-gray-200 hover:bg-gray-500 transition-inset"
+                  onClick={() => close && close(false)}
+                >取消修改</button>
+              </div>
+          }
         </div>
       </div>
     </div>

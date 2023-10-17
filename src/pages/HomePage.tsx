@@ -4,18 +4,18 @@ import Header from "components/Header"
 import SampleCard from "components/SampleCard"
 import TimeLine from "components/TimeLine"
 import { useState, useEffect } from 'react'
-import { db, getDatabase, getOneDatabase } from 'utils/firebase'
+import { getDatabase } from 'utils/firebase'
 
 const HomePage = () => {
-  const [personal, setPersonal] = useState<any | null>(null)
+  const [personal, setPersonal] = useState<any>(null)
   const [sampleCards, setSampleCards] = useState<any[]>([])
   const [experience, setExperience] = useState<any[]>([])
 
   useEffect(() => {
     const getPersonal = async () => {
-      const res = await getOneDatabase('personal', 'easton')
+      const res = await getDatabase('personal')
       if (res) {
-        setPersonal(res)
+        setPersonal(res[0])
       }
     }
     const getSampleCards = async () => {
@@ -25,10 +25,9 @@ const HomePage = () => {
       }
     }
     const getExperience = async () => {
-      const res = await db.collection('experience').get()
+      const res = await getDatabase('experience')
       if (res) {
-        const data = res.docs.map(doc => doc.data())
-        setExperience(data.reverse())
+        setExperience(res.reverse())
       }
     }
     getPersonal()
@@ -55,9 +54,9 @@ const HomePage = () => {
         <section className="bg-gray-50 py-4 px-2">
           <div className="mb-4 border-b-2 sm:text-center font-bold">作品集...</div>
           <div className="flex gap-2 ">
-            {sampleCards?.map((card, index) =>
+            {sampleCards?.map(card =>
               <SampleCard
-                key={index}
+                key={card.id}
                 id={card.id}
                 link={card.link}
                 title={card.title}
