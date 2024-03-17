@@ -23,6 +23,7 @@ const EditPersonal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    introduction.replace(/\n/g, '<br/>')
     const res = await setDatabase(name, state, current, introduction)
     if (res) {
       alert('修改完成')

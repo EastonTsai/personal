@@ -73,8 +73,7 @@ interface portfolioType {
 export const editDatabase = async (collection: string, id: string, data: portfolioType
 ) => {
   try {
-    const res = await db.collection(collection).doc(id).set(data)
-    console.log('res::', res)
+    await db.collection(collection).doc(id).set(data)
   }
   catch (err) {
     console.log('error', err)

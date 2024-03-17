@@ -1,6 +1,7 @@
 import { loadImage } from "methods/loadImage"
 import { FormInput } from "./FormItem"
 import { useState, useRef } from 'react'
+import { useNavigate } from "react-router-dom"
 import { addDatabase, editDatabase, upLoadStorage } from "utils/firebase"
 
 interface editModal {
@@ -26,6 +27,7 @@ const EditPortfolio = (props: editModal) => {
   const [featureList, setFeatureList] = useState<string[]>(defaultFeatures || [])
   const [technology, setTechnology] = useState('')
   const [technologyList, setTechnologyList] = useState<string[]>(defaultTechnology || [])
+  const navigate = useNavigate()
 
   const handleGetImageRef = async (files: FileList | null) => {
     if (files && files.length >= 1) {
@@ -80,8 +82,8 @@ const EditPortfolio = (props: editModal) => {
           technology: technologyList
         })
     }
-
-
+    alert(('修改完成'))
+    close && close(false)
   }
 
   return (
@@ -145,7 +147,7 @@ const EditPortfolio = (props: editModal) => {
               <div className=" mt-2 min-h border">
                 {
                   featureList.map(item =>
-                    <div className="flex items-center">
+                    <div key={item} className="flex items-center">
                       <p className=" p-1">- {item}</p>
                       <span className=" ml-2 p-1 rounded-full font-bold text-red-400 cursor-pointer hover:bg-gray-300"
                         onClick={() => setFeatureList(featureList.filter(content => content !== item))}
@@ -172,7 +174,7 @@ const EditPortfolio = (props: editModal) => {
               <div className=" mt-2 min-h border">
                 {
                   technologyList.map(item =>
-                    <div className="flex items-center">
+                    <div key={item} className="flex items-center">
                       <p className=" p-1">- {item}</p>
                       <span className=" ml-2 p-1 rounded-full font-bold text-red-400 cursor-pointer hover:bg-gray-300"
                         onClick={() => setTechnologyList(technologyList.filter(content => content !== item))}
